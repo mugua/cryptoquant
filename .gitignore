@@ -245,3 +245,4 @@ terraform.rc
 bower_components/
 jspm_packages/
 typings/
+package-lock.json
