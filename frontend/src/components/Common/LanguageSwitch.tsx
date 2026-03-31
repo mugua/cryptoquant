@@ -4,7 +4,7 @@ import { GlobalOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useAppStore } from '../../store';
 import type { Language } from '../../types';
-import axios from 'axios';
+import apiClient from '../../api/client';
 
 const languageLabels: Record<Language, string> = {
   'zh-CN': '🇨🇳 中文',
@@ -16,19 +16,14 @@ const LanguageSwitch: React.FC = () => {
   const language = useAppStore((s) => s.language);
   const setLanguage = useAppStore((s) => s.setLanguage);
   const isAuthenticated = useAppStore((s) => s.isAuthenticated);
-  const accessToken = useAppStore((s) => s.accessToken);
 
   const handleChange = async (lang: Language) => {
     setLanguage(lang);
     await i18n.changeLanguage(lang);
 
-    if (isAuthenticated && accessToken) {
+    if (isAuthenticated) {
       try {
-        await axios.patch(
-          '/api/v1/user/settings',
-          { language: lang },
-          { headers: { Authorization: `Bearer ${accessToken}` } }
-        );
+        await apiClient.patch('/user/settings', { language: lang });
       } catch {
         // Silently ignore sync failure
       }
