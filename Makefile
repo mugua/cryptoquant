@@ -152,7 +152,7 @@ shell-backend:
 
 ## shell-db: Open a psql session in the postgres container
 shell-db:
-	$(DOCKER_COMPOSE) exec postgres psql -U $${POSTGRES_USER:-cryptoquant} -d $${POSTGRES_DB:-cryptoquant}
+	$(DOCKER_COMPOSE) exec postgres psql -U cryptoquant -d cryptoquant
 
 ## clean: Remove build artefacts, caches, and compiled files
 clean:
