@@ -198,7 +198,8 @@ def run_scheduled_backtest(self) -> Dict[str, Any]:
             freq = f"{minutes}min"
             idx = pd.date_range(start=start, end=end, freq=freq, tz=timezone.utc)
             n = len(idx)
-            np.random.seed(hash(strategy_id) % 2**31)
+            MAX_SEED_VALUE = 2**31
+            np.random.seed(hash(strategy_id) % MAX_SEED_VALUE)
             returns = np.random.normal(0.0002, 0.018, n)
             price = 30000.0
             closes = []

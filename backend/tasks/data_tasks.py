@@ -201,16 +201,14 @@ def sync_orders(self) -> Dict[str, Any]:
     errors = 0
 
     for entry in api_keys:
-        user_id = entry.get("user_id")
-        exchange_id = entry.get("exchange", "binance")
-        api_key = entry.get("api_key", "")
-        api_secret = entry.get("api_secret", "")
+        uid = str(entry.get("user_id", ""))
+        exch = str(entry.get("exchange", "binance"))
 
         try:
             engine = ExecutionEngine(
-                exchange_id=exchange_id,
-                api_key=api_key,
-                api_secret=api_secret,
+                exchange_id=exch,
+                api_key=entry.get("api_key", ""),
+                api_secret=entry.get("api_secret", ""),
             )
             engine.connect()
             open_orders = engine.get_open_orders()
@@ -228,13 +226,13 @@ def sync_orders(self) -> Dict[str, Any]:
                 }
                 for o in open_orders
             ]
-            cache_key = f"open_orders:{user_id}:{exchange_id}"
+            cache_key = f"open_orders:{uid}:{exch}"
             r.set(cache_key, json.dumps(orders_data), ex=600)
             synced += 1
-            logger.info("Synced %d open orders for user %s on %s", len(open_orders), user_id, exchange_id)
+            logger.info("Synced %d open orders for user=%s exchange=%s", len(open_orders), uid, exch)
 
         except Exception as exc:
-            logger.error("Order sync failed for user %s on %s: %s", user_id, exchange_id, exc)
+            logger.error("Order sync failed for user=%s exchange=%s: %s", uid, exch, exc)
             errors += 1
 
     return {"synced": synced, "errors": errors}

@@ -112,7 +112,8 @@ class ExecutionEngine:
         if self._sandbox and self._exchange.urls.get("test"):
             self._exchange.set_sandbox_mode(True)
         self._retry(self._exchange.load_markets)
-        logger.info("ExecutionEngine connected to %s (sandbox=%s)", self.exchange_id, self._sandbox)
+        name = str(self.exchange_id)
+        logger.info("ExecutionEngine connected to %s (sandbox=%s)", name, self._sandbox)
 
     def disconnect(self) -> None:
         """Close the exchange connection."""
