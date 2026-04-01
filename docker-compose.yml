@@ -80,11 +80,11 @@ services:
       --concurrency=4
       --queues=default,high_priority,low_priority
     healthcheck:
-      test: ["CMD", "celery", "-A", "tasks.celery_app", "inspect", "ping"]
+      test: ["CMD", "celery", "-A", "tasks.celery_app", "inspect", "ping", "--timeout", "10"]
       interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
+      timeout: 30s
+      retries: 5
+      start_period: 60s
 
   celery_beat:
     <<: *backend-common
@@ -93,6 +93,10 @@ services:
       --loglevel=info
       --scheduler celery.beat:PersistentScheduler
     depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
       celery_worker:
         condition: service_healthy
 
