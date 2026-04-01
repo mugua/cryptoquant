@@ -30,6 +30,12 @@ celery_app.conf.update(
     timezone="UTC",
     enable_utc=True,
 
+    # Broker connection retry on startup (Celery 5.3+, required in 6.0+).
+    broker_connection_retry_on_startup=True,
+
+    # Default queue – must match the queues the worker listens on.
+    task_default_queue="default",
+
     # Result expiry (24 hours).
     result_expires=86400,
 
