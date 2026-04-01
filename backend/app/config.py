@@ -1,4 +1,5 @@
 from functools import lru_cache
+import json
 from typing import List
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -19,10 +20,7 @@ class Settings(BaseSettings):
 
     @property
     def cors_origins_list(self) -> List[str]:
-        if isinstance(self.CORS_ORIGINS, list):
-            return self.CORS_ORIGINS
         if self.CORS_ORIGINS.startswith("["):
-            import json
             return json.loads(self.CORS_ORIGINS)
         return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
 
