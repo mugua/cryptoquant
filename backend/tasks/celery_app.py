@@ -39,7 +39,11 @@ def _remove_stale_healthcheck(**kwargs):
 
 @worker_ready.connect
 def _mark_worker_ready(**kwargs):
-    open(HEALTHCHECK_FILE, "w").close()
+    try:
+        with open(HEALTHCHECK_FILE, "w"):
+            pass
+    except OSError:
+        pass
 
 
 @worker_shutdown.connect
