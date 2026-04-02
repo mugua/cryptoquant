@@ -1,4 +1,4 @@
-# Keep the Docker build context clean — exclude dev/local artefacts that
+# Keep the Docker build context clean — exclude dev/local artifacts that
 # should never end up in the production image.
 
 .env
